@@ -1,8 +1,5 @@
 Cheddar Cheese
 Bread
 
-<<<<<<< HEAD
 Grill for 3 minutes
-=======
-Grill for 3 minutes
->>>>>>> fa48d76dae8f78809dd8d597550b70f419930e73
+

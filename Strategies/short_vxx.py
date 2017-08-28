@@ -11,7 +11,7 @@ import pandas.stats.moments as st
 def initialize(context):    
     # Declaring VXX as the stock for shorting
     context.vxx = symbol('VXX')
-    context.spy = symvol('SPY')
+    context.spy = symbol('SPY')
     
     context.vxx_pct = 1
     context.pf_target = 20000
@@ -40,7 +40,9 @@ def initialize(context):
         # Every 30 minutes run schedule
         if (i == 1) or (i % time_interval == 0):
             # This will start at 9:31AM and will run every 30 minutes
-            schedule_function(stop_loss, date_rules.every_day(), time_rules.market_open(minutes=i),True)
+            schedule_function(stop_loss, date_rules.every_day(), 
+                              time_rules.market_open(minutes=i),
+                              calendar = calendars.US_EQUITIES)
     
     # Setting trading gurads
     # set_max_order_count(5)

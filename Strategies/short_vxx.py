@@ -24,9 +24,13 @@ def initialize(context):
     #context.target_mv = 50000
     
     # Scheduling the order function to occur everyday 5 minutes after market open
-    schedule_function(my_rebalance, date_rules.every_day(), time_rules.market_open(hours = 0, minutes = 5))
+    schedule_function(my_rebalance, date_rules.every_day(), 
+                      time_rules.market_open(hours = 0, minutes = 5),
+                      calendar = calendars.US_EQUITIES)
     
-    schedule_function(stop_loss, date_rules.every_day(), time_rules.market_close(hours = 0, minutes = 1))
+    schedule_function(stop_loss, date_rules.every_day(), 
+                      time_rules.market_close(hours = 0, minutes = 1),
+                      calendar = calendars.US_EQUITIES)
     
     time_interval = 30
     

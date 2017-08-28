@@ -6,8 +6,7 @@ import datetime as dt
 import numpy as np
 import pandas as pd
 import pandas.stats.moments as st
-
-#%%        
+     
 # Post Function for fetch_csv where futures data from Quandl is standardized
 def initialize(context):    
     # Declaring VXX as the stock for shorting
@@ -42,7 +41,6 @@ def initialize(context):
     # Setting trading gurads
     # set_max_order_count(5)
 
-#%%
 def maturities(context,data):
     
     # Calculate today, but note that since we are adjusting for lookback bias, we need to change the current date to one day prior
@@ -97,7 +95,6 @@ def maturities(context,data):
     front_weight = float(dte.days)/term.days
     return front_weight
 
-#%%
 def before_trading_start(context,data):
     # Pulling VIX
     vix = pd.read_csv('http://www.cboe.com/publish/scheduledtask/mktdata/datahouse/vixcurrent.csv')
@@ -163,7 +160,7 @@ def stop_loss(context, data):
         context.augen_trigger = context.augen_vol < context.augen_threshold
         if context.vxx_trigger:
             if context.vxx in context.portfolio.positions:
-                #print "Stop loss reached - %.4f" %(context.price_change-1)
+                print("Stop loss reached - %.4f" %(context.price_change-1))
                 order_target(context.vxx, 0)
                 context.open_price = context.current_price
                 context.stop_loss_not_triggered = False
@@ -186,9 +183,9 @@ def stop_loss(context, data):
                 vxx_mv = -target_mv*context.vxx_pct#-min(target_mv*context.vxx_pct,context.target_mv)
                 vxx_amount = vxx_mv/data.current(context.vxx,'price')
                 order_target(context.vxx,vxx_amount)
-                #print "Buyback reached - %.4f" %(context.drop_price_change-1)
+                print("Buyback reached - %.4f" %(context.drop_price_change-1))
                 spy_return = data.current(context.spy,'price')/context.spy_last_close
-                #print "SPY Return: %.4f" %(spy_return - 1)
+                print("SPY Return: %.4f" %(spy_return - 1))
                 # context.stop_loss_not_triggered = True
                 context.buyback_not_triggered = False
     
@@ -197,7 +194,7 @@ def my_rebalance(context, data):
     log.info(context.portfolio.cash)
     if context.signal:
         if context.vxx in context.portfolio.positions:
-            #log.info("Already in - %.4f" %context.last_ratio)
+            print("Already in - %.4f" %context.last_ratio)
             pass
         else:
             # Calculating the number of shares of VXX to short to reach the target
@@ -206,12 +203,12 @@ def my_rebalance(context, data):
             vxx_mv = -target_mv*context.vxx_pct#-min(target_mv*context.vxx_pct,context.target_mv)
             vxx_amount = vxx_mv/data.current(context.vxx,'price')
             order_target(context.vxx,vxx_amount)
-            #log.info("Short - %.4f" %context.last_ratio)
+            print("Short - %.4f" %context.last_ratio)
     else:
         # If the contango ratio is above specified threshold, purchase back VXX shares and remain in cash
         order_target(context.vxx,0)
-        log.info("Move to cash - %.4f" %context.last_ratio)
-    vxx_record = context.portfolio.positions[context.vxx].amount
+        print("Move to cash - %.4f" %context.last_ratio)
+    display_all()
             
     #record(vxx_shares=vxx_record,ratio_vxx=context.last_ratio)
 def handle_data(context,data):
